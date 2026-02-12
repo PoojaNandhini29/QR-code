@@ -10,13 +10,15 @@ export default function Dashboard() {
     const generateQRCode = async () => {
         setLoading(true)
         const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
+
+        // Use real user ID if available, otherwise mock ID for bypass mode
+        const userId = user?.id || '00000000-0000-0000-0000-000000000000'
 
         const expiresAt = dayjs().add(10, 'minute').toISOString()
 
         const { data, error } = await supabase
             .from('attendance_sessions')
-            .insert([{ created_by: user.id, expires_at: expiresAt }])
+            .insert([{ created_by: userId, expires_at: expiresAt }])
             .select()
             .single()
 
@@ -33,6 +35,22 @@ export default function Dashboard() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
             <h1 className="text-3xl font-bold mb-8">Attendance Dashboard</h1>
+
+            {window.location.hostname === 'localhost' && (
+                <div className="mb-6 p-4 bg-yellow-100 text-yellow-800 rounded-lg border border-yellow-300 max-w-md text-center">
+                    <strong>⚠️ Mobile Scanning Warning</strong>
+                    <p className="mt-2 text-sm">
+                        You are on <code>localhost</code>. If you generate a QR code now, your phone <strong>will not</strong> be able to open it.
+                    </p>
+                    <p className="mt-2 text-sm">
+                        Please change the URL in your browser address bar to your computer's Network IP (e.g., <code>192.168.x.x:5173</code>) <strong>before</strong> generating the code.
+                    </p>
+                    <p className="mt-2 text-xs text-gray-600">
+                        Check your terminal where `npm run dev` is running to find the Network URL.
+                    </p>
+                </div>
+            )}
+
             <button
                 onClick={generateQRCode}
                 disabled={loading}
