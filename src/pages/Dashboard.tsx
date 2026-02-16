@@ -59,6 +59,13 @@ export default function Dashboard() {
                 {loading ? 'Generating...' : 'Generate New QR Code'}
             </button>
 
+            <button
+                onClick={() => window.location.href = '/attendance'}
+                className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+            >
+                View Today's Attendance
+            </button>
+
             {qrValue && (
                 <div className="mt-8 p-6 bg-white rounded-lg shadow-xl flex flex-col items-center">
                     <QRCodeCanvas value={qrValue} size={256} />

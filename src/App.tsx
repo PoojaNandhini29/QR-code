@@ -3,6 +3,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Scan from './pages/Scan'
 import ProtectedRoute from './components/ProtectedRoute'
+import AttendanceList from './pages/AttendanceList'
 import './App.css'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/scan" element={<Scan />} />
         <Route element={<ProtectedRoute />}>
+          <Route path="/attendance" element={<AttendanceList />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
