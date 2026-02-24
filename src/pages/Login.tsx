@@ -3,8 +3,8 @@ import { supabase } from '../lib/supabaseClient'
 import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
-    const [email, setEmail] = useState('teacher@gmail.com')
-    const [password, setPassword] = useState('teacher')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
@@ -12,24 +12,17 @@ export default function Login() {
         e.preventDefault()
         setLoading(true)
 
-        // Hardcoded credentials as requested
-        const targetEmail = 'teacher@gmail.com'
-        const targetPassword = 'teacher'
-
-        const { error } = await supabase.auth.signInWithPassword({
-            email: targetEmail,
-            password: targetPassword
-        })
+        const { error } = await supabase.auth.signInWithPassword({ email, password })
 
         if (error) {
-            console.error("Supabase Login Error:", error.message)
-            // Fallback/Bypass for development if credentials match hardcoded values
-            if (email === targetEmail && password === targetPassword) {
-                console.warn("Enabling Dev Bypass for hardcoded credentials")
+            console.error("Login Error:", error.message)
+            // Dev bypass: allow hardcoded teacher credentials as fallback
+            if (email === 'teacher@gmail.com' && password === 'teacher') {
+                console.warn("Enabling Dev Bypass")
                 localStorage.setItem('auth_bypass', 'true')
                 navigate('/dashboard')
             } else {
-                alert(error.message)
+                alert('Invalid email or password. Please try again.')
             }
         } else {
             localStorage.removeItem('auth_bypass')
