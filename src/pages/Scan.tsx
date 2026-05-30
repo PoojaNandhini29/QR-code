@@ -1,13 +1,11 @@
 
 import { useEffect, useState } from 'react'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import dayjs from 'dayjs'
 
 export default function Scan() {
     const [searchParams] = useSearchParams()
-    // navigate is intentionally unused as we are not redirecting anymore, but keeping hook just in case
-    // const navigate = useNavigate() 
     const sessionCode = searchParams.get('session_code')
 
     const [email, setEmail] = useState('')
